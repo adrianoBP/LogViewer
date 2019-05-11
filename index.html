@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+
+    <link rel="icon" href="./icon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.css">
+    <link rel="stylesheet" href="./stylesheet.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard-polyfill/2.8.0/clipboard-polyfill.js" charset="utf-8"></script>
+    <!-- <script src="https://watzonservices.ddns.net/live"></script> -->
+
+    <title>LogView</title>
+</head>
+
+<body>
+    <div id="headContainer">
+        <div id="filtersContainer">
+            <button class="ui icon button" id="buttonSorting" onclick="ChangeSorting();">
+                <i id="iconSorting" class="icon arrow up"></i>
+            </button>
+        </div>
+
+        <!-- TODO GRID? -->
+        <!-- TODO ADD DROPDPON (references needed) for filter type -->
+        <!-- TODO ADD DATEPICKER (references needed) for filter time -->
+        <!-- TODO ADD BUTTON to go back to home -->
+
+        <div id="logTableHeadContainer">
+            <table class="ui selectable inverted table">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Type</th>
+                        <th>Location</th>
+                        <th>Method</th>
+                        <th>Id</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div id="bodyContainer">
+        <table class="ui selectable inverted table" id="logTable">
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://watzonservices.ddns.net/Util/jsHelper/package.js" charset="utf-8"></script>
+    <script src="./script.js"></script>
+</body>
+
+</html>

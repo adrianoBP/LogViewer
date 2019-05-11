@@ -1,0 +1,102 @@
+body, html {
+    background-color: #333333;
+    color: #333333;
+}
+
+td:hover {
+    cursor: default;
+}
+
+.red {
+    color:#e53935;
+    font-weight: bold;
+}
+.yellow {
+    color:#ffc107;
+    font-weight: bold;
+}
+.green {
+    color:#43a047;
+    font-weight: bold;
+}
+.blue {
+    color:#29b6f6;
+    font-weight: bold;
+}
+.white {
+    color:#eeeeee;
+    font-weight: bold;
+}
+
+#headContainer{
+    left: 0px;
+    top: 0px;
+    height: 100px;
+    width: 100%;
+    background-color: #333333;
+    /* background-color: red; */
+    position: fixed;
+}
+
+#logTableHeadContainer{
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+}
+
+#bodyContainer{
+    margin-top: 100px;
+}
+
+#filtersContainer{
+    width: 95%;
+    margin: auto;
+    margin-top: .5rem;
+}
+
+/* SEET ALERT */
+.swal-overlay {
+    background-color: rgba(66, 66, 66, 0.70);
+}
+
+.swal-modal {
+    width: 90%;
+}
+
+.swal-button {
+    padding: 10px 28px;
+    border-radius: px;
+    background-color: #333333;
+    font-size: 12px;
+    text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.3);
+}
+
+.swal-button:not([disabled]):hover {
+    background-color: #717171 !important;
+}
+/* END SWEET ALERT */
+
+/* SCROLLBAR */
+::-webkit-scrollbar {
+        width: 8px;
+}
+
+::-webkit-scrollbar-track {
+        background: #4c4c4c;
+}
+
+::-webkit-scrollbar-thumb {
+        background: #2b2b2b;
+}
+
+::-webkit-scrollbar-thumb:hover {
+        background: #2b2b2b;
+}
+/* END SCROLLBAR */
+
+button.blue{
+    background-color: #5B7BFA !important;
+}
+button.blue:hover{
+    background-color: #4267F9 !important;
+}

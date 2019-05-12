@@ -7,6 +7,22 @@ td:hover {
     cursor: default;
 }
 
+th:hover{
+    cursor: pointer !important;
+    background-color: #434343 !important;
+}
+
+#headContainer{
+    left: 0px;
+    top: 0px;
+    height: 100px;
+    width: 100%;
+    background-color: #333333;
+    /* background-color: red; */
+    position: fixed;
+    display: none;
+}
+
 .red {
     color:#e53935;
     font-weight: bold;
@@ -26,16 +42,6 @@ td:hover {
 .white {
     color:#eeeeee;
     font-weight: bold;
-}
-
-#headContainer{
-    left: 0px;
-    top: 0px;
-    height: 100px;
-    width: 100%;
-    background-color: #333333;
-    /* background-color: red; */
-    position: fixed;
 }
 
 #logTableHeadContainer{
@@ -94,9 +100,25 @@ td:hover {
 }
 /* END SCROLLBAR */
 
-button.blue{
-    background-color: #5B7BFA !important;
+#headerTime{
+    width: 12%;
 }
-button.blue:hover{
-    background-color: #4267F9 !important;
+#headerType{
+    width: 12%;
+}
+#headerLocation{
+    width: 34%;
+}
+#headerMethod{
+    width: 20%;
+}
+#headerId{
+    width: 22%;
+}
+.dropdown{
+    max-width: 20% !important;
+}
+
+.ui.label{
+    font-size: .75rem !important;
 }

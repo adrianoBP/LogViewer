@@ -4,23 +4,51 @@ let fileName = urlParams.get('logfile');
 let logTable = document.getElementById("logTable");
 let dictContent = {};
 
-let SORTING = "DESC";
+let SORTING_TIME = "DESC";
+let ACTIVE = false;
 
 let buttonSorting = document.getElementById("buttonSorting");
 let iconSorting = document.getElementById("iconSorting");
+let dropdownTypes = document.getElementById("dropdownTypes");
 
-window.setInterval(function(){
-    GetLog(fileName);
+window.setInterval(function() {
+    // GetLog(fileName);
+
 }, 2000);
 
 // TODO add max items
 
 Init();
 
-function Init(){
+function ResizeEvent() {
 
-    ChangeSortingIcon();
-    GetLog(fileName);
+    if (ACTIVE) {
+
+        if (window.innerWidth < 768) {
+            $('#headContainer').css("display", "none");
+            $('#bodyContainer').css("margin-top", "0px");
+        } else {
+            $('#headContainer').css("display", "inline");
+            $('#bodyContainer').css("margin-top", "100px");
+        }
+    }
+
+}
+
+function Init() {
+
+    if(fileName == null){
+        window.location.replace("https://watzonservices.ddns.net/422");
+    }else{
+        ResizeEvent();
+        GetLog(fileName);
+        BindActions();
+    }
+}
+
+function InitUI() {
+
+    $('#headContainer').css("display", "inline");
 }
 
 function GetLog(fileName) {
@@ -30,16 +58,17 @@ function GetLog(fileName) {
     request.open('GET', `https://watzonservices.ddns.net/Projects/Logging/Logs/${fileName}`);
     request.send(null);
     request.onreadystatechange = function() {
-
+        ACTIVE = false;
         if (request.readyState == 4 && request.status == 200) {
             if (request.responseURL == "https://watzonservices.ddns.net/LandingSite/pages/404") {
-                console.log("FILE NOT FOUND.");
-                // TODO: handle
+                window.location.replace("https://watzonservices.ddns.net/404");
             } else if (request.responseURL == "https://watzonservices.ddns.net/LandingSite/pages/403") {
                 console.log("UNABLE TO ACCESS THE FILE.");
             } else {
+                ACTIVE = true;
+                InitUI();
                 DisplayLog(request.responseText);
-                BindActions();
+
             }
         }
     }
@@ -51,7 +80,7 @@ function DisplayLog(logs) {
     let lines = logs.split('\n');
     lines.pop();
 
-    switch(SORTING){
+    switch (SORTING_TIME) {
         case "ASC":
             lines.sort((a, b) => new Date(a.substr(1, 19)) - new Date(b.substr(1, 19)));
             break;
@@ -84,6 +113,25 @@ function DisplayLog(logs) {
 
         $(logTable).find('tbody').append(BuilLogItem(fullLog));
     }
+
+    $('.logRow').bind('click', function() {
+        let key = $(this).attr("id");
+        swal(dictContent[key], {
+                buttons: {
+                    copy: "Copy",
+                    confirm: "Ok"
+                }
+            })
+            .then((value) => {
+                switch (value) {
+                    case "copy":
+                        clipboard.writeText(dictContent[key]);
+                        break;
+                }
+            });
+    });
+
+    BindStyle();
 }
 
 function BuilLogItem(fullLog) {
@@ -105,12 +153,12 @@ function BuilLogItem(fullLog) {
     }
 
     let HTMLRow = `
-    <tr id="${fullLog.id}">
-        <td>${fullLog.head.time}</td>
-        <td class="${colorLog}">${fullLog.head.type}</td>
-        <td>${fullLog.head.location}</td>
-        <td>${fullLog.head.method}</td>
-        <td>${fullLog.head.id}</td>
+    <tr id="${fullLog.id}" class="logRow">
+        <td class="cellTime">${fullLog.head.time}</td>
+        <td class="cellType ${colorLog}">${fullLog.head.type}</td>
+        <td class="cellLocation">${fullLog.head.location}</td>
+        <td class="cellMethod">${fullLog.head.method}</td>
+        <td class="cellId">${fullLog.head.id}</td>
     </tr>
     `;
 
@@ -119,22 +167,17 @@ function BuilLogItem(fullLog) {
 
 function BindActions() {
 
-    $('tr').click(function() {
-        let key = $(this).attr("id");
-        swal(dictContent[key], {
-                buttons: {
-                    copy: "Copy",
-                    confirm: "Ok"
-                }
-            })
-            .then((value) => {
-                switch (value) {
-                    case "copy":
-                        clipboard.writeText(dictContent[key]);
-                        break;
-                }
-            });
+    $('#headerTime').bind('click', function() {
+        ChangeSorting();
     });
+}
+
+function BindStyle() {
+    $('.cellTime').outerWidth(`${$('#headerTime').outerWidth()}px`);
+    $('.cellType').outerWidth(`${$('#headerType').outerWidth()}px`);
+    $('.cellLocation').outerWidth(`${$('#headerLocation').outerWidth()}px`);
+    $('.cellMethod').outerWidth(`${$('#headerMethod').outerWidth()}px`);
+    $('.cellId').outerWidth(`${$('#headerId').outerWidth()}px`);
 }
 
 function ClearLog() {
@@ -142,25 +185,13 @@ function ClearLog() {
     $(logTable).find('tbody').empty();
 }
 
-function ChangeSorting(){
+function ChangeSorting() {
 
-    if(SORTING == "ASC"){
-        SORTING = "DESC";
-    }else{
-        SORTING = "ASC";
+    if (SORTING_TIME == "ASC") {
+        SORTING_TIME = "DESC";
+    } else {
+        SORTING_TIME = "ASC";
     }
-    ChangeSortingIcon()
     window.scrollTo(0, 0);
     GetLog(fileName);
-}
-
-function ChangeSortingIcon(){
-
-    if(SORTING == "ASC" && iconSorting.classList.contains("up")){
-        iconSorting.classList.remove("up");
-        iconSorting.className += " down";
-    }else if(iconSorting.classList.contains("down")){
-        iconSorting.classList.remove("down");
-        iconSorting.className += " up";
-    }
 }

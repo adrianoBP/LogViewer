@@ -17,15 +17,10 @@
     <title>LogView</title>
 </head>
 
-<body>
+<body onresize="ResizeEvent();">
+    
     <div id="headContainer">
-        <div id="filtersContainer">
-            <button class="ui icon button" id="buttonSorting" onclick="ChangeSorting();">
-                <i id="iconSorting" class="icon arrow up"></i>
-            </button>
-        </div>
 
-        <!-- TODO GRID? -->
         <!-- TODO ADD DROPDPON (references needed) for filter type -->
         <!-- TODO ADD DATEPICKER (references needed) for filter time -->
         <!-- TODO ADD BUTTON to go back to home -->
@@ -34,16 +29,17 @@
             <table class="ui selectable inverted table">
                 <thead>
                     <tr>
-                        <th>Time</th>
-                        <th>Type</th>
-                        <th>Location</th>
-                        <th>Method</th>
-                        <th>Id</th>
+                        <th id="headerTime" class="header">Time</th>
+                        <th id="headerType" class="header">Type</th>
+                        <th id="headerLocation" class="header">Location</th>
+                        <th id="headerMethod" class="header">Method</th>
+                        <th id="headerId" class="header">Id</th>
                     </tr>
                 </thead>
             </table>
         </div>
     </div>
+
     <div id="bodyContainer">
         <table class="ui selectable inverted table" id="logTable">
             <tbody>
@@ -51,6 +47,10 @@
         </table>
     </div>
 
+    <script type="text/javascript">
+        $('.ui.dropdown')
+            .dropdown();
+    </script>
     <script src="https://watzonservices.ddns.net/Util/jsHelper/package.js" charset="utf-8"></script>
     <script src="./script.js"></script>
 </body>

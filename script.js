@@ -12,8 +12,7 @@ let iconSorting = document.getElementById("iconSorting");
 let dropdownTypes = document.getElementById("dropdownTypes");
 
 window.setInterval(function() {
-    // GetLog(fileName);
-
+    GetLog(fileName);
 }, 2000);
 
 // TODO add max items
@@ -55,7 +54,7 @@ function GetLog(fileName) {
 
     let firtsResultOver = false;
     let request = new XMLHttpRequest();
-    request.open('GET', `https://watzonservices.ddns.net/Projects/Logging/Logs/${fileName}`);
+    request.open('GET', `https://watzonservices.ddns.net/Projects/Logging/Logs/${fileName}?${Math.random()}`);
     request.send(null);
     request.onreadystatechange = function() {
         ACTIVE = false;
@@ -74,26 +73,39 @@ function GetLog(fileName) {
     }
 }
 
+function AddBufferElements(buffer){
+
+    if(SORTING_TIME == "DESC"){
+        buffer.reverse();
+    }
+
+    buffer.forEach(function(element){
+        $(logTable).find('tbody').append(BuilLogItem(element));
+    });
+}
+
 function DisplayLog(logs) {
 
     ClearLog();
     let lines = logs.split('\n');
     lines.pop();
-
+    // console.log( new Date(lines[0].substr(1, 26).replace( /(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2}).(\d{6})/, "$3-$2-$1 $4:$5.$6")));
     switch (SORTING_TIME) {
         case "ASC":
-            lines.sort((a, b) => new Date(a.substr(1, 19)) - new Date(b.substr(1, 19)));
+            lines.sort((a, b) => new Date(a.substr(1, 19).replace( /(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2})/, "$3-$2-$1 $4:$5")) - new Date(b.substr(1, 19).replace( /(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2})/, "$3-$2-$1 $4:$5")));
             break;
         case "DESC":
-            lines.sort((a, b) => new Date(b.substr(1, 19)) - new Date(a.substr(1, 19)));
+            lines.sort((a, b) => new Date(b.substr(1, 19).replace( /(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2})/, "$3-$2-$1 $4:$5")) - new Date(a.substr(1, 19).replace( /(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2})/, "$3-$2-$1 $4:$5")));
             break;
         default:
-            lines.sort((a, b) => new Date(b.substr(1, 19)) - new Date(a.substr(1, 19)));
+            lines.sort((a, b) => new Date(b.substr(1, 19).replace( /(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2})/, "$3-$2-$1 $4:$5")) - new Date(a.substr(1, 19).replace( /(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2})/, "$3-$2-$1 $4:$5")));
             break;
     }
 
+    let buffer = [];
 
     for (let i = 0; i < lines.length; i++) {
+
 
         let logItems = lines[i].split('|');
         let logHeadItems = logItems[0].split(']');
@@ -111,7 +123,24 @@ function DisplayLog(logs) {
         fullLog.id = GUID_NEW();
         dictContent[fullLog.id] = fullLog.body;
 
-        $(logTable).find('tbody').append(BuilLogItem(fullLog));
+        if(buffer.length > 0){
+
+            if(buffer[0].head.time == fullLog.head.time && buffer[0].head.id == fullLog.head.id){
+                buffer.push(fullLog);
+                if(i == lines.length-1){
+                    AddBufferElements(buffer);
+                    buffer = [];
+                }
+            }else{
+                AddBufferElements(buffer);
+                buffer = [];
+                buffer.push(fullLog);
+            }
+        }else{
+            buffer.push(fullLog);
+        }
+
+        // $(logTable).find('tbody').append(BuilLogItem(fullLog));
     }
 
     $('.logRow').bind('click', function() {

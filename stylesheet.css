@@ -18,7 +18,6 @@ th:hover{
     height: 100px;
     width: 100%;
     background-color: #333333;
-    /* background-color: red; */
     position: fixed;
     display: none;
 }
